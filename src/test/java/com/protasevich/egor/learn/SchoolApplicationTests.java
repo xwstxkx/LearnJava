@@ -1,13 +1,13 @@
-package com.protasevich.egor.learnjava;
+package com.protasevich.egor.learn;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LearnJavaApplicationTests {
+class SchoolApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }

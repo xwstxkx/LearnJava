@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-schools-table.yml
+#  - include:
+#      file: db/changelog/changeset/update-students-table.yml

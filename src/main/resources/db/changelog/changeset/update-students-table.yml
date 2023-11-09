@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: update-students
+      author: Egor Protasevich
+      changes:
+        - update:
+            schemaName: public
+            tableName: students
+            columns:
+              - column:
+                  name: firstname
+                  value: 'Егор'
+              - column:
+                  name: lastname
+                  value: 'Протасевич'
+              - column:
+                  name: grade
+                  value: 10
+            where:
+              id=1
