@@ -15,6 +15,6 @@ databaseChangeLog:
                   value: 'Протасевич'
               - column:
                   name: grade
-                  value: 10
+                  value: '10'
             where:
               id=1
