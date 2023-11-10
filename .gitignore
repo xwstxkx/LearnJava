@@ -11,4 +11,4 @@ target/
 *.ipr
 
 ### Project ###
-**/src/main/resources/application.yml
+!**/src/main/resources/application.yml

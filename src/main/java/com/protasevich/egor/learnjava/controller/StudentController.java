@@ -2,9 +2,9 @@ package com.protasevich.egor.learnjava.controller;
 
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.service.StudentService;
 import com.protasevich.egor.learnjava.model.SchoolWithoutStudentModel;
 import com.protasevich.egor.learnjava.model.StudentModel;
+import com.protasevich.egor.learnjava.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

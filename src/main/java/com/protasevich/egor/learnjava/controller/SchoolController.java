@@ -2,8 +2,8 @@ package com.protasevich.egor.learnjava.controller;
 
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.service.SchoolService;
 import com.protasevich.egor.learnjava.model.SchoolModel;
+import com.protasevich.egor.learnjava.service.SchoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,8 @@ public class SchoolController {
     @Operation(summary = "Сохранение одной школы")
     public ResponseEntity<String> saveSchool(@RequestBody SchoolModel schoolModel) throws ParametersNotSpecified {
         schoolService.saveOne(schoolModel);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body("Школа была сохранена!");
     }
 
@@ -37,7 +38,8 @@ public class SchoolController {
     @Operation(summary = "Обновление одной школы")
     public ResponseEntity<String> updateSchool(@RequestBody SchoolModel schoolModel) throws ParametersNotSpecified {
         schoolService.saveOne(schoolModel);
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body("Школа была изменена!");
     }
 

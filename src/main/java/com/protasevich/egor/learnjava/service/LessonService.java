@@ -4,8 +4,8 @@ import com.protasevich.egor.learnjava.entity.LessonEntity;
 import com.protasevich.egor.learnjava.entity.SchoolEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.repository.LessonRepository;
 import com.protasevich.egor.learnjava.model.LessonModel;
+import com.protasevich.egor.learnjava.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +19,15 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
 
-
-    public LessonEntity lessonSave(LessonModel lessonModel)
+    public String lessonSave(LessonModel lessonModel)
             throws ParametersNotSpecified {
 
         if (lessonModel.getName() == null) throw new ParametersNotSpecified();
-        return lessonRepository.save(LessonModel.toEntity(lessonModel));
-
+        lessonRepository.save(LessonModel.toEntity(lessonModel));
+        return "Урок был сохранён успешно!";
     }
 
-    public LessonModel patchLesson(Long id, LessonModel lessonModel)
+    public String patchLesson(Long id, LessonModel lessonModel)
             throws ParametersNotSpecified {
 
         LessonEntity lessonEntity = lessonRepository.findById(id)
@@ -44,7 +43,7 @@ public class LessonService {
 
         LessonEntity savedLesson = LessonModel.toEntity(lesson);
         lessonRepository.save(savedLesson);
-        return lesson;
+        return "Патч урока был проведён успешно!";
     }
 
     public LessonModel getOneLesson(Long id) throws ObjectNotFound {

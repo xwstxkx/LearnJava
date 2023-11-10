@@ -1,11 +1,10 @@
 package com.protasevich.egor.learnjava.controller;
 
-import com.protasevich.egor.learnjava.entity.LessonEntity;
 import com.protasevich.egor.learnjava.entity.SchoolEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.service.LessonService;
 import com.protasevich.egor.learnjava.model.LessonModel;
+import com.protasevich.egor.learnjava.service.LessonService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +22,11 @@ public class LessonController {
 
     @PostMapping
     @Operation(summary = "Сохранение одного урока")
-    public ResponseEntity<LessonEntity> lessonSave(@RequestBody LessonModel lessonModel) throws ParametersNotSpecified {
+    public ResponseEntity<String> lessonSave(@RequestBody LessonModel lessonModel) throws ParametersNotSpecified {
         return ResponseEntity.ok(lessonService.lessonSave(lessonModel));
     }
 
-    @PostMapping("/many")
+    @PostMapping("/all")
     @Operation(summary = "Сохранение многих уроков")
     public ResponseEntity<SchoolEntity> saveManyLessons(@RequestBody List<LessonModel> lessonModelList) throws ParametersNotSpecified {
         return ResponseEntity.ok(lessonService.saveManyLessons(lessonModelList));
@@ -41,7 +40,7 @@ public class LessonController {
 
     @PutMapping
     @Operation(summary = "Обновление одного урока")
-    public ResponseEntity<LessonEntity> updateLesson(@RequestBody LessonModel lessonModel) throws ParametersNotSpecified {
+    public ResponseEntity<String> updateLesson(@RequestBody LessonModel lessonModel) throws ParametersNotSpecified {
         return ResponseEntity.ok(lessonService.lessonSave(lessonModel));
     }
 
@@ -60,8 +59,8 @@ public class LessonController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Патч одного урока")
-    public ResponseEntity<LessonModel> putLesson(@PathVariable Long id,
-                                                 @RequestBody LessonModel lessonModel) throws ParametersNotSpecified {
+    public ResponseEntity<String> patchLesson(@PathVariable Long id,
+                                              @RequestBody LessonModel lessonModel) throws ParametersNotSpecified {
         return ResponseEntity.ok(lessonService.patchLesson(id, lessonModel));
     }
 }

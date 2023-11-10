@@ -2,9 +2,7 @@ package com.protasevich.egor.learnjava.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "schools")
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class SchoolEntity {

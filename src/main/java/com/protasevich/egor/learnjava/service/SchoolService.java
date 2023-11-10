@@ -3,8 +3,8 @@ package com.protasevich.egor.learnjava.service;
 import com.protasevich.egor.learnjava.entity.SchoolEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.repository.SchoolRepository;
 import com.protasevich.egor.learnjava.model.SchoolModel;
+import com.protasevich.egor.learnjava.repository.SchoolRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,12 +21,12 @@ public class SchoolService {
 
 
     //Save/update school
-    public SchoolEntity saveOne(SchoolModel schoolModel) throws ParametersNotSpecified {
+    public void saveOne(SchoolModel schoolModel) throws ParametersNotSpecified {
         if (schoolModel.getName() == null) throw new ParametersNotSpecified();
-        return schoolRepository.save(SchoolModel.toEntity(schoolModel));
+        schoolRepository.save(SchoolModel.toEntity(schoolModel));
     }
 
-    public SchoolModel patchSchool(Long id, SchoolModel schoolModel) throws ObjectNotFound {
+    public void patchSchool(Long id, SchoolModel schoolModel) throws ObjectNotFound {
         if (id == null) throw new ObjectNotFound();
         SchoolEntity schoolEntity = schoolRepository.findById(id).orElseThrow(ObjectNotFound::new);
         SchoolModel school = SchoolModel.toModel(schoolEntity);
@@ -35,18 +35,16 @@ public class SchoolService {
         }
         SchoolEntity savedSchool = SchoolModel.toEntity(school);
         schoolRepository.save(savedSchool);
-        return school;
     }
 
     //Save many schools
-    public SchoolEntity saveManySchools(List<SchoolModel> schoolModelList) throws ParametersNotSpecified {
+    public void saveManySchools(List<SchoolModel> schoolModelList) throws ParametersNotSpecified {
         for (SchoolModel schoolModel : schoolModelList) {
             if (schoolModel.getName() == null) {
                 throw new ParametersNotSpecified();
             }
         }
         schoolRepository.saveAll(SchoolModel.toListEntity(schoolModelList));
-        return null;
     }
 
 
