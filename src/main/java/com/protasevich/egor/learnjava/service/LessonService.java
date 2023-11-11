@@ -4,7 +4,7 @@ import com.protasevich.egor.learnjava.entity.LessonEntity;
 import com.protasevich.egor.learnjava.entity.SchoolEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.model.LessonModel;
+import com.protasevich.egor.learnjava.dto.LessonDTO;
 import com.protasevich.egor.learnjava.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,52 +19,52 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
 
-    public String lessonSave(LessonModel lessonModel)
+    public LessonDTO lessonSave(LessonDTO lessonDTO)
             throws ParametersNotSpecified {
 
-        if (lessonModel.getName() == null) throw new ParametersNotSpecified();
-        lessonRepository.save(LessonModel.toEntity(lessonModel));
-        return "Урок был сохранён успешно!";
+        if (lessonDTO.getName() == null) throw new ParametersNotSpecified();
+        lessonRepository.save(LessonDTO.toEntity(lessonDTO));
+        return lessonDTO;
     }
 
-    public String patchLesson(Long id, LessonModel lessonModel)
+    public String patchLesson(Long id, LessonDTO lessonDTO)
             throws ParametersNotSpecified {
 
         LessonEntity lessonEntity = lessonRepository.findById(id)
                 .orElseThrow(ParametersNotSpecified::new);
-        LessonModel lesson = LessonModel.toModel(lessonEntity);
+        LessonDTO lesson = LessonDTO.toModel(lessonEntity);
 
-        if (lessonModel.getName() != null) {
-            lesson.setName(lessonModel.getName());
+        if (lessonDTO.getName() != null) {
+            lesson.setName(lessonDTO.getName());
         }
-        if (lessonModel.getId() != null) {
-            lesson.setId(lessonModel.getId());
+        if (lessonDTO.getId() != null) {
+            lesson.setId(lessonDTO.getId());
         }
 
-        LessonEntity savedLesson = LessonModel.toEntity(lesson);
+        LessonEntity savedLesson = LessonDTO.toEntity(lesson);
         lessonRepository.save(savedLesson);
         return "Патч урока был проведён успешно!";
     }
 
-    public LessonModel getOneLesson(Long id) throws ObjectNotFound {
+    public LessonDTO getOneLesson(Long id) throws ObjectNotFound {
 
         LessonEntity lesson = lessonRepository.findById(id)
                 .orElseThrow(ObjectNotFound::new);
         if (lesson == null) throw new ObjectNotFound();
-        return LessonModel.toModel(lesson);
+        return LessonDTO.toModel(lesson);
     }
 
-    public List<LessonModel> getAllLessons(PageRequest pageRequest) {
+    public List<LessonDTO> getAllLessons(PageRequest pageRequest) {
         Page<LessonEntity> page = lessonRepository.findAll(pageRequest);
-        return LessonModel.toListModel(page.getContent());
+        return LessonDTO.toListModel(page.getContent());
     }
 
-    public SchoolEntity saveManyLessons(List<LessonModel> lessonModelList)
+    public SchoolEntity saveManyLessons(List<LessonDTO> lessonDTOList)
             throws ParametersNotSpecified {
-        for (LessonModel lessonModel : lessonModelList) {
-            if (lessonModel.getName() == null) throw new ParametersNotSpecified();
+        for (LessonDTO lessonDTO : lessonDTOList) {
+            if (lessonDTO.getName() == null) throw new ParametersNotSpecified();
         }
-        lessonRepository.saveAll(LessonModel.toListEntity(lessonModelList));
+        lessonRepository.saveAll(LessonDTO.toListEntity(lessonDTOList));
         return null;
     }
 

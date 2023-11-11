@@ -1,4 +1,4 @@
-package com.protasevich.egor.learnjava.model;
+package com.protasevich.egor.learnjava.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class JwtResponse {
+public class UserDTO {
 
-    private String token;
+    private Long id;
+    private String username;
+    private String email;
+
 }

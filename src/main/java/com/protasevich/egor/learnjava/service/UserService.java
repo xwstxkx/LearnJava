@@ -2,7 +2,7 @@ package com.protasevich.egor.learnjava.service;
 
 import com.protasevich.egor.learnjava.entity.UserEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
-import com.protasevich.egor.learnjava.model.RegistrationRequest;
+import com.protasevich.egor.learnjava.dto.RegistrationRequest;
 import com.protasevich.egor.learnjava.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

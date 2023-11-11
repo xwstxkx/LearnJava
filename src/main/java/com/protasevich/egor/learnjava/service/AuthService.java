@@ -5,10 +5,10 @@ import com.protasevich.egor.learnjava.exceptions.BadCredentials;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.PasswordDoNotMatch;
 import com.protasevich.egor.learnjava.exceptions.UserIsAlreadyExists;
-import com.protasevich.egor.learnjava.model.JwtRequest;
-import com.protasevich.egor.learnjava.model.JwtResponse;
-import com.protasevich.egor.learnjava.model.RegistrationRequest;
-import com.protasevich.egor.learnjava.model.UserModel;
+import com.protasevich.egor.learnjava.dto.JwtRequest;
+import com.protasevich.egor.learnjava.dto.JwtResponse;
+import com.protasevich.egor.learnjava.dto.RegistrationRequest;
+import com.protasevich.egor.learnjava.dto.UserDTO;
 import com.protasevich.egor.learnjava.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +60,6 @@ public class AuthService {
         }
 
         UserEntity user = service.createNewUser(request);
-        return ResponseEntity.ok(new UserModel(user.getId(), user.getUsername(), user.getEmail()));
+        return ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getEmail()));
     }
 }

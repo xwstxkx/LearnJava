@@ -1,4 +1,4 @@
-package com.protasevich.egor.learnjava.model;
+package com.protasevich.egor.learnjava.dto;
 
 import lombok.Data;
 

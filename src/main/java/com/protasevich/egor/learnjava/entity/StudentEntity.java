@@ -2,15 +2,15 @@ package com.protasevich.egor.learnjava.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "students")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Getter
 @Setter
 public class StudentEntity {
