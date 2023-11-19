@@ -3,7 +3,7 @@ package com.protasevich.egor.learnjava.service;
 import com.protasevich.egor.learnjava.entity.SchoolEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.dto.SchoolDTO;
+import com.protasevich.egor.learnjava.dto.SchoolDto;
 import com.protasevich.egor.learnjava.repository.SchoolRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,43 +21,46 @@ public class SchoolService {
 
 
     //Save/update school
-    public void saveOne(SchoolDTO schoolDTO) throws ParametersNotSpecified {
-        if (schoolDTO.getName() == null) throw new ParametersNotSpecified();
-        schoolRepository.save(SchoolDTO.toEntity(schoolDTO));
+    public SchoolDto saveSchool(SchoolDto schoolDto) throws ParametersNotSpecified {
+        if (schoolDto.getName() == null) throw new ParametersNotSpecified();
+        schoolRepository.save(SchoolDto.toEntity(schoolDto));
+        return schoolDto;
     }
 
-    public void patchSchool(Long id, SchoolDTO schoolDTO) throws ObjectNotFound {
+    public SchoolDto patchSchool(Long id, SchoolDto schoolDto) throws ObjectNotFound {
         if (id == null) throw new ObjectNotFound();
         SchoolEntity schoolEntity = schoolRepository.findById(id).orElseThrow(ObjectNotFound::new);
-        SchoolDTO school = SchoolDTO.toModel(schoolEntity);
-        if (schoolDTO.getName() != null) {
-            school.setName(schoolDTO.getName());
+        SchoolDto school = SchoolDto.toModel(schoolEntity);
+        if (schoolDto.getName() != null) {
+            school.setName(schoolDto.getName());
         }
-        SchoolEntity savedSchool = SchoolDTO.toEntity(school);
+        SchoolEntity savedSchool = SchoolDto.toEntity(school);
         schoolRepository.save(savedSchool);
+        return schoolDto;
     }
 
     //Save many schools
-    public void saveManySchools(List<SchoolDTO> schoolDTOList) throws ParametersNotSpecified {
-        for (SchoolDTO schoolDTO : schoolDTOList) {
+    public List<SchoolDto> saveManySchools(List<SchoolDto> schoolDtoList) throws ParametersNotSpecified {
+        for (SchoolDto schoolDTO : schoolDtoList) {
             if (schoolDTO.getName() == null) {
                 throw new ParametersNotSpecified();
             }
         }
-        schoolRepository.saveAll(SchoolDTO.toListEntity(schoolDTOList));
+        schoolRepository.saveAll(SchoolDto.toListEntity(schoolDtoList));
+        return schoolDtoList;
     }
 
 
     //Get one school
-    public SchoolDTO getOne(Long id) throws ObjectNotFound {
+    public SchoolDto findById(Long id) throws ObjectNotFound {
         SchoolEntity school = schoolRepository.findById(id).orElseThrow(ObjectNotFound::new);
-        return SchoolDTO.toModel(school);
+        return SchoolDto.toModel(school);
     }
 
     //Get all schools
-    public List<SchoolDTO> getAllSchools(PageRequest pageRequest) {
+    public List<SchoolDto> getAllSchools(PageRequest pageRequest) {
         Page<SchoolEntity> page = schoolRepository.findAll(pageRequest);
-        return SchoolDTO.toListModel(page.getContent());
+        return SchoolDto.toListModel(page.getContent());
     }
 
     //Delete school
@@ -69,8 +72,8 @@ public class SchoolService {
 
     //School transaction
     @Transactional
-    public void transactionSchool(SchoolDTO schoolDTO, int page, int size) throws ParametersNotSpecified {
-        saveOne(schoolDTO);
+    public void transactionSchool(SchoolDto schoolDTO, int page, int size) throws ParametersNotSpecified {
+        saveSchool(schoolDTO);
         getAllSchools(PageRequest.of(page, size));
     }
 }

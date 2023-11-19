@@ -1,6 +1,6 @@
 package com.protasevich.egor.learnjava.controller;
 
-import com.protasevich.egor.learnjava.dto.SchoolDTO;
+import com.protasevich.egor.learnjava.dto.SchoolDto;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
 import com.protasevich.egor.learnjava.service.SchoolService;
@@ -27,8 +27,8 @@ public class SchoolController {
 
     @PostMapping("/school")
     @Operation(summary = "Сохранение одной школы")
-    public ResponseEntity<String> saveSchool(@RequestBody SchoolDTO schoolDTO) throws ParametersNotSpecified {
-        schoolService.saveOne(schoolDTO);
+    public ResponseEntity<String> saveSchool(@RequestBody SchoolDto schoolDTO) throws ParametersNotSpecified {
+        schoolService.saveSchool(schoolDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("Школа была сохранена!");
@@ -36,8 +36,8 @@ public class SchoolController {
 
     @PutMapping
     @Operation(summary = "Обновление одной школы")
-    public ResponseEntity<String> updateSchool(@RequestBody SchoolDTO schoolDTO) throws ParametersNotSpecified {
-        schoolService.saveOne(schoolDTO);
+    public ResponseEntity<String> updateSchool(@RequestBody SchoolDto schoolDTO) throws ParametersNotSpecified {
+        schoolService.saveSchool(schoolDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Школа была изменена!");
@@ -45,15 +45,15 @@ public class SchoolController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение одной школы")
-    public ResponseEntity<SchoolDTO> getOneSchool(@PathVariable Long id) throws ObjectNotFound {
+    public ResponseEntity<SchoolDto> getOneSchool(@PathVariable Long id) throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(schoolService.getOne(id));
+                .body(schoolService.findById(id));
     }
 
     @GetMapping
     @Operation(summary = "Получение всех школ")
-    public ResponseEntity<List<SchoolDTO>> getAllSchools(@RequestParam(required = false, defaultValue = "0") int page,
+    public ResponseEntity<List<SchoolDto>> getAllSchools(@RequestParam(required = false, defaultValue = "0") int page,
                                                          @RequestParam(required = false, defaultValue = "10") int size)
             throws ParametersNotSpecified {
         if (page < 0 || size < 1) {
@@ -74,8 +74,8 @@ public class SchoolController {
 
     @PostMapping("/many")
     @Operation(summary = "Сохранение нескольких школ")
-    public ResponseEntity<String> saveManySchools(@RequestBody List<SchoolDTO> schoolDTOList) throws ParametersNotSpecified {
-        schoolService.saveManySchools(schoolDTOList);
+    public ResponseEntity<String> saveManySchools(@RequestBody List<SchoolDto> schoolDtoList) throws ParametersNotSpecified {
+        schoolService.saveManySchools(schoolDtoList);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("Сохранение нескольких школ было успешно завершено");
@@ -84,7 +84,7 @@ public class SchoolController {
     @PatchMapping("/patch/{id}")
     @Operation(summary = "Патч одной школы")
     public ResponseEntity<String> patchSchool(@PathVariable Long id,
-                                              @RequestBody SchoolDTO schoolDTO) throws ObjectNotFound {
+                                              @RequestBody SchoolDto schoolDTO) throws ObjectNotFound {
         schoolService.patchSchool(id, schoolDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -93,8 +93,8 @@ public class SchoolController {
 
     @PostMapping("/school/v2")
     @Operation(summary = "Транзакция одной школы")
-    public ResponseEntity<ResponseEntity<List<SchoolDTO>>> saveSchoolTransaction
-            (@RequestBody SchoolDTO schoolDTO,
+    public ResponseEntity<ResponseEntity<List<SchoolDto>>> saveSchoolTransaction
+            (@RequestBody SchoolDto schoolDTO,
              @RequestParam(required = false, defaultValue = "0") int page,
              @RequestParam(required = false, defaultValue = "10") int size)
             throws ParametersNotSpecified {

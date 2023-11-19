@@ -1,11 +1,11 @@
 package com.protasevich.egor.learnjava.controller;
 
+import com.protasevich.egor.learnjava.dto.JwtRequest;
+import com.protasevich.egor.learnjava.dto.RegistrationRequest;
 import com.protasevich.egor.learnjava.exceptions.BadCredentials;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.PasswordDoNotMatch;
 import com.protasevich.egor.learnjava.exceptions.UserIsAlreadyExists;
-import com.protasevich.egor.learnjava.dto.JwtRequest;
-import com.protasevich.egor.learnjava.dto.RegistrationRequest;
 import com.protasevich.egor.learnjava.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

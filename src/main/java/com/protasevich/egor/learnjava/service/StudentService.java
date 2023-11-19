@@ -5,8 +5,8 @@ import com.protasevich.egor.learnjava.entity.SchoolEntity;
 import com.protasevich.egor.learnjava.entity.StudentEntity;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
-import com.protasevich.egor.learnjava.dto.SchoolWithoutStudentDTO;
-import com.protasevich.egor.learnjava.dto.StudentDTO;
+import com.protasevich.egor.learnjava.dto.CleanSchoolDto;
+import com.protasevich.egor.learnjava.dto.StudentDto;
 import com.protasevich.egor.learnjava.repository.LessonRepository;
 import com.protasevich.egor.learnjava.repository.SchoolRepository;
 import com.protasevich.egor.learnjava.repository.StudentRepository;
@@ -26,24 +26,24 @@ public class StudentService {
     private final LessonRepository lessonRepository;
 
     //Save One student
-    public StudentDTO saveStudent(StudentDTO studentDTO, Long schoolId) throws ParametersNotSpecified, ObjectNotFound {
-        StudentEntity entity = StudentDTO.toEntity(studentDTO);
+    public StudentDto saveStudent(StudentDto studentDTO, Long schoolId) throws ParametersNotSpecified, ObjectNotFound {
+        StudentEntity entity = StudentDto.toEntity(studentDTO);
         if (entity.getFirstname() == null ||
             entity.getLastname() == null ||
             entity.getGrade() == 0) throw new ParametersNotSpecified();
         SchoolEntity schoolEntity = schoolRepository.findById(schoolId).orElseThrow(ObjectNotFound::new);
         entity.setSchool(schoolEntity);
         StudentEntity savedStudent = studentRepository.save(entity);
-        return StudentDTO.toSchoolModel(savedStudent);
+        return StudentDto.toSchoolModel(savedStudent);
     }
 
     //Patch student
-    public StudentDTO patchStudent(Long id, StudentDTO studentDTO, Long schoolId) throws ObjectNotFound, ParametersNotSpecified {
+    public StudentDto patchStudent(Long id, StudentDto studentDTO, Long schoolId) throws ObjectNotFound, ParametersNotSpecified {
         StudentEntity studentEntity = studentRepository.findById(id).orElseThrow(ObjectNotFound::new);
         SchoolEntity schoolEntity = schoolRepository.findById(schoolId).orElseThrow(ObjectNotFound::new);
         studentEntity.setSchool(schoolEntity);
         if (studentDTO == null) throw new ParametersNotSpecified();
-        StudentDTO student = StudentDTO.toSchoolModel(studentEntity);
+        StudentDto student = StudentDto.toSchoolModel(studentEntity);
         if (studentDTO.getFirstname() != null) {
             student.setFirstname(studentDTO.getFirstname());
         }
@@ -57,14 +57,14 @@ public class StudentService {
         if (studentDTO.getId() != null) {
             student.setId(studentDTO.getId());
         }
-        StudentEntity savedStudent = StudentDTO.toEntity(student);
+        StudentEntity savedStudent = StudentDto.toEntity(student);
         savedStudent.setSchool(schoolRepository.findById(schoolId).orElseThrow(ObjectNotFound::new));
         studentRepository.save(savedStudent);
         return student;
     }
 
     //Save students lesson
-    public StudentDTO saveMoreStudent(Long lessonId, List<Long> studentIds) throws ObjectNotFound {
+    public StudentDto saveMoreStudent(Long lessonId, List<Long> studentIds) throws ObjectNotFound {
         LessonEntity lesson = lessonRepository.findById(lessonId).orElseThrow(ObjectNotFound::new);
         for (Long id : studentIds) {
             StudentEntity student = studentRepository.findById(id).orElseThrow(ObjectNotFound::new);
@@ -75,42 +75,42 @@ public class StudentService {
     }
 
     //Save many students
-    public String saveManyStudents(List<StudentDTO> studentDTOList) throws ParametersNotSpecified {
-        for (StudentDTO studentDTO : studentDTOList) {
+    public String saveManyStudents(List<StudentDto> studentDtoList) throws ParametersNotSpecified {
+        for (StudentDto studentDTO : studentDtoList) {
             if (studentDTO == null) throw new ParametersNotSpecified();
         }
-        studentRepository.saveAll(StudentDTO.toListEntity(studentDTOList));
+        studentRepository.saveAll(StudentDto.toListEntity(studentDtoList));
         return "Ученики были сохранены успешно!";
     }
 
     //Assign student
-    public StudentDTO assignStudentLesson(Long lessonId, Long studentId) throws ObjectNotFound {
+    public StudentDto assignStudentLesson(Long lessonId, Long studentId) throws ObjectNotFound {
         StudentEntity student = studentRepository.findById(studentId).orElseThrow(ObjectNotFound::new);
         LessonEntity lesson = lessonRepository.findById(lessonId).orElseThrow(ObjectNotFound::new);
         student.getLessons().add(lesson);
         StudentEntity savedStudent = studentRepository.save(student);
-        return StudentDTO.toModel(savedStudent);
+        return StudentDto.toModel(savedStudent);
     }
 
     //Get One student
-    public StudentDTO getOneStudent(Long id) throws ObjectNotFound {
+    public StudentDto findStudentById(Long id) throws ObjectNotFound {
         StudentEntity student = studentRepository.findById(id).orElseThrow(ObjectNotFound::new);
-        return StudentDTO.toModel(student);
+        return StudentDto.toModel(student);
     }
 
 
     //Find school by student id
-    public SchoolWithoutStudentDTO findSchool(Long id) throws ObjectNotFound {
+    public CleanSchoolDto findSchool(Long id) throws ObjectNotFound {
         StudentEntity entity = studentRepository.findById(id).orElseThrow(ObjectNotFound::new);
         if (entity.getSchool() == null) throw new ObjectNotFound();
         SchoolEntity schoolEntity = entity.getSchool();
-        return SchoolWithoutStudentDTO.toSchoolModel(schoolEntity);
+        return CleanSchoolDto.toSchoolModel(schoolEntity);
     }
 
     //Get all students
-    public List<StudentDTO> getAllStudents(PageRequest pageRequest) {
+    public List<StudentDto> getAllStudents(PageRequest pageRequest) {
         Page<StudentEntity> page = studentRepository.findAll(pageRequest);
-        return StudentDTO.toListModel(page.getContent());
+        return StudentDto.toListModel(page.getContent());
     }
 
     //Delete student
@@ -121,18 +121,18 @@ public class StudentService {
     }
 
     //Find student
-    public StudentDTO findStudent(String firstname, String lastname, String schoolName, int grade) throws ObjectNotFound {
+    public StudentDto findStudent(String firstname, String lastname, String schoolName, int grade) throws ObjectNotFound {
         StudentEntity studentEntity = studentRepository.currentFindStudent(firstname, lastname, schoolName, grade);
         if (studentEntity == null) throw new ObjectNotFound();
-        return StudentDTO.toModel(studentRepository
+        return StudentDto.toModel(studentRepository
                 .findById(studentEntity.getId()).orElseThrow(ObjectNotFound::new));
     }
 
     //Find student V2
-    public StudentDTO findStudentV2(String firstname, String lastname, int grade, String schoolName) throws ObjectNotFound {
+    public StudentDto findStudentV2(String firstname, String lastname, int grade, String schoolName) throws ObjectNotFound {
         StudentEntity studentEntity = studentRepository.findStudentByFirstnameAndLastnameAndGrade(firstname, lastname, grade, schoolName);
         if (studentEntity == null) throw new ObjectNotFound();
-        return StudentDTO.toModel(studentRepository
+        return StudentDto.toModel(studentRepository
                 .findById(studentEntity.getId()).orElseThrow(ObjectNotFound::new));
     }
 

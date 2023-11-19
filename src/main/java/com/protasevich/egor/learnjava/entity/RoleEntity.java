@@ -1,13 +1,13 @@
 package com.protasevich.egor.learnjava.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter

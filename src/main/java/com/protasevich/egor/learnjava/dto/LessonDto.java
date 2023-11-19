@@ -13,41 +13,41 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-public class LessonDTO {
+public class LessonDto {
 
     private Long id;
     private String name;
 
-    public static LessonDTO toModel(LessonEntity entity) {
-        LessonDTO lessonDTO = new LessonDTO();
+    public static LessonDto toModel(LessonEntity entity) {
+        LessonDto lessonDTO = new LessonDto();
         lessonDTO.setId(entity.getId());
         lessonDTO.setName(entity.getName());
         return lessonDTO;
     }
 
-    public static LessonEntity toEntity(LessonDTO lessonDTO) {
+    public static LessonEntity toEntity(LessonDto lessonDTO) {
         LessonEntity lessonEntity = new LessonEntity();
         lessonEntity.setId(lessonDTO.getId());
         lessonEntity.setName(lessonDTO.getName());
         return lessonEntity;
     }
 
-    public static List<LessonDTO> toListModel(List<LessonEntity> lessonEntities) {
-        List<LessonDTO> lessonDTOList = new ArrayList<>();
+    public static List<LessonDto> toListModel(List<LessonEntity> lessonEntities) {
+        List<LessonDto> lessonDtoList = new ArrayList<>();
         for (LessonEntity lessonEntity : lessonEntities) {
-            lessonDTOList.add(toModel(lessonEntity));
+            lessonDtoList.add(toModel(lessonEntity));
         }
-        return lessonDTOList;
+        return lessonDtoList;
     }
 
-    public static List<LessonEntity> toListEntity(List<LessonDTO> lessonDTOList) {
+    public static List<LessonEntity> toListEntity(List<LessonDto> lessonDtoList) {
         List<LessonEntity> lessonEntities = new ArrayList<>();
-        for (LessonDTO lessonDTO : lessonDTOList) {
+        for (LessonDto lessonDTO : lessonDtoList) {
             lessonEntities.add(toEntity(lessonDTO));
         }
         return lessonEntities;
     }
 
-    public LessonDTO() {
+    public LessonDto() {
     }
 }

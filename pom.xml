@@ -68,15 +68,12 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.liquibase</groupId>-->
-<!--            <artifactId>liquibase-core</artifactId>-->
-<!--            <version>4.23.0</version>-->
-<!--        </dependency>-->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.23.0</version>
         </dependency>
+
 
         <!--        SECURITY        -->
 
@@ -88,6 +85,17 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+            <version>0.11.5</version>
+            <scope>runtime</scope>
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->
@@ -113,14 +121,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.liquibase</groupId>-->
-<!--                <artifactId>liquibase-maven-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <propertyFile>src/main/resources/application.yml</propertyFile>-->
-<!--                    <propertyFileWillOverride>true</propertyFileWillOverride>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFile>src/main/resources/application.yml</propertyFile>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>

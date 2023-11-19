@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,5 +44,10 @@ public class StudentEntity {
             inverseJoinColumns = @JoinColumn(name = "lesson_id"))
     private List<LessonEntity> lessons;
 
-
+    public List<LessonEntity> getLessons() {
+        if (lessons == null) {
+            lessons = new ArrayList<>();
+        }
+        return lessons;
+    }
 }

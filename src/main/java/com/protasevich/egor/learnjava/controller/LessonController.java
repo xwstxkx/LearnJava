@@ -1,7 +1,6 @@
 package com.protasevich.egor.learnjava.controller;
 
-import com.protasevich.egor.learnjava.dto.LessonDTO;
-import com.protasevich.egor.learnjava.entity.SchoolEntity;
+import com.protasevich.egor.learnjava.dto.LessonDto;
 import com.protasevich.egor.learnjava.exceptions.ObjectNotFound;
 import com.protasevich.egor.learnjava.exceptions.ParametersNotSpecified;
 import com.protasevich.egor.learnjava.service.LessonService;
@@ -21,45 +20,45 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @PostMapping
+    @PostMapping("/create")
     @Operation(summary = "Сохранение одного урока")
-    public ResponseEntity<LessonDTO> lessonSave(@RequestBody LessonDTO lessonDTO)
+    public ResponseEntity<LessonDto> lessonSave(@RequestBody LessonDto lessonDTO)
             throws ParametersNotSpecified {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(lessonService.lessonSave(lessonDTO));
+                .body(lessonService.saveLesson(lessonDTO));
     }
 
     @PostMapping("/all")
     @Operation(summary = "Сохранение многих уроков")
-    public ResponseEntity<SchoolEntity> saveManyLessons(@RequestBody List<LessonDTO> lessonDTOList)
+    public ResponseEntity<List<LessonDto>> saveManyLessons(@RequestBody List<LessonDto> lessonDtoList)
             throws ParametersNotSpecified {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(lessonService.saveManyLessons(lessonDTOList));
+                .body(lessonService.saveManyLessons(lessonDtoList));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение одного урока")
-    public ResponseEntity<LessonDTO> getOneLesson(@PathVariable Long id)
+    public ResponseEntity<LessonDto> getOneLesson(@PathVariable Long id)
             throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(lessonService.getOneLesson(id));
+                .body(lessonService.findLessonById(id));
     }
 
     @PutMapping
     @Operation(summary = "Обновление одного урока")
-    public ResponseEntity<LessonDTO> updateLesson(@RequestBody LessonDTO lessonDTO)
+    public ResponseEntity<LessonDto> updateLesson(@RequestBody LessonDto lessonDTO)
             throws ParametersNotSpecified {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(lessonService.lessonSave(lessonDTO));
+                .body(lessonService.saveLesson(lessonDTO));
     }
 
     @GetMapping("/all")
     @Operation(summary = "Получение всех урока")
-    public ResponseEntity<List<LessonDTO>> getAllLessons(
+    public ResponseEntity<List<LessonDto>> getAllLessons(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
         return ResponseEntity
@@ -78,8 +77,8 @@ public class LessonController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Патч одного урока")
-    public ResponseEntity<String> patchLesson(@PathVariable Long id,
-                                              @RequestBody LessonDTO lessonDTO)
+    public ResponseEntity<LessonDto> patchLesson(@PathVariable Long id,
+                                              @RequestBody LessonDto lessonDTO)
             throws ParametersNotSpecified {
         return ResponseEntity
                 .status(HttpStatus.OK)
