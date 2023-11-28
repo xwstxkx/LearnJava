@@ -12,39 +12,56 @@ import com.protasevich.egor.learnjava.repository.StudentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class StudentServiceTests {
 
     @Mock
     private StudentRepository studentRepository;
     @Mock
+    private LessonRepository lessonRepository;
+    @Mock
     private SchoolRepository schoolRepository;
     @InjectMocks
     private StudentService studentService;
-    private StudentDto studentDto;
-    private StudentEntity studentEntity;
+    private StudentDto studentDto1;
+    private StudentDto studentDto2;
+    private StudentEntity studentEntity1;
+    private StudentEntity studentEntity2;
     private SchoolEntity schoolEntity;
+    private LessonEntity lessonEntity;
+    private List<StudentDto> studentDtos;
+    private List<StudentEntity> studentEntities;
 
     @BeforeEach
     void init() {
         schoolEntity = SchoolEntity.builder()
                 .name("Средняя школа №1 г. Пинска").build();
-        studentDto = StudentDto.builder()
+        studentDto1 = StudentDto.builder()
                 .firstname("Егор").lastname("Протасевич")
                 .grade(11).schoolId(1L).build();
-        studentEntity = StudentEntity.builder()
+        studentDto2 = StudentDto.builder()
+                .firstname("Илья").lastname("Новик")
+                .grade(3).schoolId(1L).build();
+        studentEntity1 = StudentEntity.builder()
                 .firstname("Егор").lastname("Протасевич")
                 .grade(11).school(schoolEntity).build();
+        studentEntity2 = StudentEntity.builder()
+                .firstname("Илья").lastname("Новик")
+                .grade(3).school(schoolEntity).build();
+        lessonEntity = LessonEntity.builder()
+                .name("Английский язык").build();
+        studentDtos = List.of(studentDto1, studentDto2);
+        studentEntities = List.of(studentEntity1, studentEntity2);
     }
 
     @Test
@@ -52,11 +69,11 @@ class StudentServiceTests {
             throws ParametersNotSpecified, ObjectNotFound {
 
         when(studentRepository.save(Mockito.any(StudentEntity.class)))
-                .thenReturn(studentEntity);
+                .thenReturn(studentEntity1);
         when(schoolRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(schoolEntity));
 
-        StudentDto savedStudent = studentService.saveStudent(studentDto, 1L);
+        StudentDto savedStudent = studentService.saveStudent(studentDto1, 1L);
 
         Assertions.assertNotNull(savedStudent);
     }
@@ -65,66 +82,62 @@ class StudentServiceTests {
     void StudentServiceTests_patchStudent_returnsStudentDto()
             throws ParametersNotSpecified, ObjectNotFound {
 
-        if (studentDto.getFirstname() != null) {
-            studentEntity.setFirstname(studentDto.getFirstname());
+        if (studentDto1.getFirstname() != null) {
+            studentEntity1.setFirstname(studentDto1.getFirstname());
         }
-        if (studentDto.getLastname() != null) {
-            studentEntity.setLastname(studentDto.getLastname());
+        if (studentDto1.getLastname() != null) {
+            studentEntity1.setLastname(studentDto1.getLastname());
         }
-        if (studentDto.getGrade() != 0) {
-            studentEntity.setGrade(studentDto.getGrade());
+        if (studentDto1.getGrade() != 0) {
+            studentEntity1.setGrade(studentDto1.getGrade());
         }
 
         when(studentRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(studentEntity));
+                .thenReturn(Optional.ofNullable(studentEntity1));
         when(studentRepository.save(Mockito.any(StudentEntity.class)))
-                .thenReturn(studentEntity);
+                .thenReturn(studentEntity1);
         when(schoolRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(schoolEntity));
 
-        StudentDto savedStudent = studentService.patchStudent(1L, studentDto, 1L);
+        StudentDto savedStudent = studentService.patchStudent(1L, studentDto1, 1L);
 
         Assertions.assertNotNull(savedStudent);
     }
 
     @Test
-    void saveMoreStudent() {
+    void StudentServiceTests_saveMoreStudent_ReturnsListOfStudentDto() throws ObjectNotFound {
+
+        when(lessonRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(lessonEntity));
+        when(studentRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(studentEntity1));
+        when(studentRepository.findById(2L))
+                .thenReturn(Optional.ofNullable(studentEntity2));
+
+        studentDtos = studentService.saveMoreStudent(1L, List.of(1L, 2L));
+
+        Assertions.assertNotNull(studentDtos);
     }
 
     @Test
-    void saveManyStudents() {
+    void StudentServiceTests_saveManyStudent_ReturnsString() throws ParametersNotSpecified {
+
+        when(studentRepository.saveAll(studentEntities))
+                .thenReturn(null);
+
+        String response = studentService.saveManyStudents(studentDtos);
+
+        Assertions.assertEquals(response, "Ученики были сохранены успешно!");
     }
 
-    @Test
-    void assignStudentLesson() {
-    }
-
-    @Test
-    void getOneStudent() {
-    }
 
     @Test
     void StudentServiceTests_findStudentById_ReturnsStudentDto() throws ObjectNotFound {
-        when(studentRepository.findById(1L)).thenReturn(Optional.ofNullable(studentEntity));
+        when(studentRepository.findById(1L)).thenReturn(Optional.ofNullable(studentEntity1));
 
         StudentDto savedStudent = studentService.findStudentById(1L);
 
         Assertions.assertNotNull(savedStudent);
     }
 
-    @Test
-    void getAllStudents() {
-    }
-
-    @Test
-    void deleteStudent() {
-    }
-
-    @Test
-    void findStudent() {
-    }
-
-    @Test
-    void findStudentV2() {
-    }
 }

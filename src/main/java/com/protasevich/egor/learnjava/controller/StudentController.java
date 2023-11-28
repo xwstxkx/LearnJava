@@ -34,7 +34,7 @@ public class StudentController {
 
     @PostMapping("/lessons")
     @Operation(summary = "Сохранение уроков для многих студентов")
-    public ResponseEntity<StudentDto> saveMoreStudent(@RequestParam Long lessonId,
+    public ResponseEntity<List<StudentDto>> saveMoreStudent(@RequestParam Long lessonId,
                                                       @RequestParam List<Long> studentIds) throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.CREATED)

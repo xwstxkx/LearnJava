@@ -8,11 +8,10 @@ import com.protasevich.egor.learnjava.repository.LessonRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +23,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class LessonServiceTests {
 
     @Mock
@@ -43,11 +42,9 @@ class LessonServiceTests {
     }
 
     @Test
-    void LessonServiceTests_lessonSave_ReturnsLessonEntity()
-            throws ParametersNotSpecified {
+    void LessonServiceTests_lessonSave_ReturnsLessonEntity() throws ParametersNotSpecified {
 
-        when(lessonRepository.save(Mockito.any(LessonEntity.class)))
-                .thenReturn(lessonEntity);
+        when(lessonRepository.save(Mockito.any(LessonEntity.class))).thenReturn(lessonEntity);
 
         LessonDto savedLesson = lessonService.saveLesson(lessonDto1);
 
@@ -56,17 +53,14 @@ class LessonServiceTests {
 
 
     @Test
-    void LessonServiceTests_patchLesson_returnsLessonDto()
-            throws ParametersNotSpecified {
+    void LessonServiceTests_patchLesson_returnsLessonDto() throws ParametersNotSpecified {
 
         if (lessonDto1.getName() != null) {
             lessonEntity.setName(lessonDto1.getName());
         }
 
-        when(lessonRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(lessonEntity));
-        when(lessonRepository.save(Mockito.any(LessonEntity.class)))
-                .thenReturn(lessonEntity);
+        when(lessonRepository.findById(1L)).thenReturn(Optional.ofNullable(lessonEntity));
+        when(lessonRepository.save(Mockito.any(LessonEntity.class))).thenReturn(lessonEntity);
 
         LessonDto savedLesson = lessonService.patchLesson(1L, lessonDto1);
 
@@ -74,8 +68,7 @@ class LessonServiceTests {
     }
 
     @Test
-    void LessonServiceTests_findLessonById_ReturnsLessonDto()
-            throws ObjectNotFound {
+    void LessonServiceTests_findLessonById_ReturnsLessonDto() throws ObjectNotFound {
         when(lessonRepository.findById(1L)).thenReturn(Optional.ofNullable(lessonEntity));
 
         LessonDto savedLesson = lessonService.findLessonById(1L);
@@ -88,18 +81,15 @@ class LessonServiceTests {
 
         Page<LessonEntity> page = Mockito.mock(Page.class);
 
-        when(lessonRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(page);
+        when(lessonRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
 
-        List<LessonDto> saveLessons = lessonService
-                .getAllLessons(PageRequest.of(1, 10));
+        List<LessonDto> saveLessons = lessonService.getAllLessons(PageRequest.of(1, 10));
 
         Assertions.assertNotNull(saveLessons);
     }
 
     @Test
-    void LessonServiceTests_saveManyLessons_ReturnsListOfLessonDto()
-            throws ParametersNotSpecified {
+    void LessonServiceTests_saveManyLessons_ReturnsListOfLessonDto() throws ParametersNotSpecified {
         List<LessonDto> lessonDtos = new ArrayList<>();
         lessonDtos.add(lessonDto1);
         lessonDtos.add(lessonDto2);
@@ -115,8 +105,7 @@ class LessonServiceTests {
     @Test
     void LessonServiceTests_deleteLesson_ReturnsDeletedLessonId() {
 
-        LessonEntity lessonEntity = LessonEntity.builder()
-                .name("Английский язык").build();
+        LessonEntity lessonEntity = LessonEntity.builder().name("Английский язык").build();
 
         when(lessonRepository.findById(1L)).thenReturn(Optional.ofNullable(lessonEntity));
 

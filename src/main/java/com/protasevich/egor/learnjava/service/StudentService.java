@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,14 +65,16 @@ public class StudentService {
     }
 
     //Save students lesson
-    public StudentDto saveMoreStudent(Long lessonId, List<Long> studentIds) throws ObjectNotFound {
+    public List<StudentDto> saveMoreStudent(Long lessonId, List<Long> studentIds) throws ObjectNotFound {
+        List<StudentDto> studentDtos = new ArrayList<>();
         LessonEntity lesson = lessonRepository.findById(lessonId).orElseThrow(ObjectNotFound::new);
         for (Long id : studentIds) {
             StudentEntity student = studentRepository.findById(id).orElseThrow(ObjectNotFound::new);
             student.getLessons().add(lesson);
             studentRepository.save(student);
+            studentDtos.add(StudentDto.toModel(student));
         }
-        return null;
+        return studentDtos;
     }
 
     //Save many students

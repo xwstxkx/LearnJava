@@ -8,11 +8,10 @@ import com.protasevich.egor.learnjava.repository.SchoolRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +23,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class SchoolServiceTests {
 
     @Mock
@@ -42,8 +41,7 @@ class SchoolServiceTests {
 
     @Test
     void SchoolServiceTests_saveSchool_ReturnsVoid() throws ParametersNotSpecified {
-        when(schoolRepository.save(Mockito.any(SchoolEntity.class)))
-                .thenReturn(schoolEntity);
+        when(schoolRepository.save(Mockito.any(SchoolEntity.class))).thenReturn(schoolEntity);
 
         SchoolDto savedSchool = schoolService.saveSchool(schoolDto);
 
@@ -51,16 +49,13 @@ class SchoolServiceTests {
     }
 
     @Test
-    void SchoolServiceTests_patchSchool_returnsSchoolDto()
-            throws ObjectNotFound {
+    void SchoolServiceTests_patchSchool_returnsSchoolDto() throws ObjectNotFound {
         if (schoolDto.getName() != null) {
             schoolEntity.setName(schoolDto.getName());
         }
 
-        when(schoolRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(schoolEntity));
-        when(schoolRepository.save(Mockito.any(SchoolEntity.class)))
-                .thenReturn(schoolEntity);
+        when(schoolRepository.findById(1L)).thenReturn(Optional.ofNullable(schoolEntity));
+        when(schoolRepository.save(Mockito.any(SchoolEntity.class))).thenReturn(schoolEntity);
 
         SchoolDto savedSchool = schoolService.patchSchool(1L, schoolDto);
 
@@ -68,13 +63,10 @@ class SchoolServiceTests {
     }
 
     @Test
-    void SchoolServiceTests_saveManySchools_ReturnsListOfSchoolDto()
-            throws ParametersNotSpecified {
+    void SchoolServiceTests_saveManySchools_ReturnsListOfSchoolDto() throws ParametersNotSpecified {
 
-        SchoolDto schoolDto1 = SchoolDto.builder()
-                .name("Английский язык").build();
-        SchoolDto schoolDto2 = SchoolDto.builder()
-                .name("Русский язык").build();
+        SchoolDto schoolDto1 = SchoolDto.builder().name("Английский язык").build();
+        SchoolDto schoolDto2 = SchoolDto.builder().name("Русский язык").build();
 
         List<SchoolDto> schoolDtos = new ArrayList<>();
         schoolDtos.add(schoolDto1);
@@ -89,8 +81,7 @@ class SchoolServiceTests {
     }
 
     @Test
-    void SchoolServiceTests_findLessonById_ReturnsSchoolDto()
-            throws ObjectNotFound {
+    void SchoolServiceTests_findLessonById_ReturnsSchoolDto() throws ObjectNotFound {
         when(schoolRepository.findById(1L)).thenReturn(Optional.ofNullable(schoolEntity));
 
         SchoolDto savedSchool = schoolService.findById(1L);
@@ -102,11 +93,9 @@ class SchoolServiceTests {
     void SchoolServiceTests_getAllSchools_ReturnsSchoolEntities() {
         Page<SchoolEntity> page = Mockito.mock(Page.class);
 
-        when(schoolRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(page);
+        when(schoolRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
 
-        List<SchoolDto> savedSchools = schoolService
-                .getAllSchools(PageRequest.of(1, 10));
+        List<SchoolDto> savedSchools = schoolService.getAllSchools(PageRequest.of(1, 10));
 
         Assertions.assertNotNull(savedSchools);
     }
@@ -119,16 +108,13 @@ class SchoolServiceTests {
     }
 
     @Test
-    void transactionSchool() throws ParametersNotSpecified {
+    void SchoolServiceTests_transactionSchool_ReturnsListSchoolDto() throws ParametersNotSpecified {
         Page<SchoolEntity> page = Mockito.mock(Page.class);
 
-        when(schoolRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(page);
-        when(schoolRepository.save(Mockito.any(SchoolEntity.class)))
-                .thenReturn(schoolEntity);
+        when(schoolRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
+        when(schoolRepository.save(Mockito.any(SchoolEntity.class))).thenReturn(schoolEntity);
 
-        List<SchoolDto> savedSchools = schoolService
-                .getAllSchools(PageRequest.of(1, 10));
+        List<SchoolDto> savedSchools = schoolService.getAllSchools(PageRequest.of(1, 10));
         SchoolDto savedSchool = schoolService.saveSchool(schoolDto);
 
         Assertions.assertNotNull(savedSchools);
